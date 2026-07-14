@@ -48,10 +48,13 @@ pysui-driven CLI (`__init__.py`, `__main__.py`, `cmd_args.py`, `cmds.py`) mirror
 
 The `contra` package has been published to devnet. `console/cmds.py` holds the captured ids as
 module-level defaults:
-- `package_id`: `0xdbf579054d6a93d3eca02d549cf16d4008475c8930fdfda40bef763a7385fff1`
-- `token_registry`: `0x5fde83596901ff336e065e63b9212a3ff066a6b74a3c0ce2f4af3708df636638`
-- `account_registry`: `0xebf3a594bd19565ff273bd99251e8ca33469b178eb45c0a9acaccf7a54af6ee0`
-- `upgrade_cap`: `0x925fcee37c48d15e07d1a86b70b64adac8dce157ed5a84369301c4a73e2f1ec4`
+- `package_id`: `0x2e2ff112f8752a7c7b05498039a431c8dbce1c57b7f6bdce270e759cb312aea1`
+- `token_registry`: `0xa0d715a3680e67b30fe2be480685fceefa377768106efbc7d6f1150559f2b194`
+- `account_registry`: `0x8d9a999bbbe9c82e2b0472f4476f7447de08ee3dd7fa8b856f9cf25201489aa4`
+- `upgrade_cap`: `0x9e413bfa00d17e91691f06b1cdfeeef21bb5fe98287d09a85b685d7e39c5e5d5`
+
+Devnet is wiped on a weekly cadence by Mysten, which invalidates these ids — republish before
+assuming any of them are live (see project memory `project_devnet_weekly_wipe`).
 
 These are the three values pysui #79's `PrivateFundsConfig` needs (package_id, token_registry,
 account_registry). No commits yet.
