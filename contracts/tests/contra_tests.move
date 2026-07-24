@@ -9,6 +9,7 @@ use contra::{
     contra,
     encrypted_amount::{Self, consistency_proof_for_testing},
     nizk,
+    policy,
     twisted_elgamal::{Self, encrypt_trivial_for_testing, encrypt_zero}
 };
 use std::unit_test::{Self, assert_eq};
@@ -551,7 +552,15 @@ fun total_consistency_proof_for_testing(
     dst: vector<u8>,
 ): nizk::ElGamalProof {
     let enc = encrypt_trivial_for_testing(value, sender_pk, r);
-    nizk::prove_elgamal(dst, sender_pk, &enc, value, r)
+    nizk::prove_elgamal(
+        dst,
+        sender_pk,
+        &vector[enc],
+        &vector[value],
+        &vector[r],
+        &ristretto255::scalar_from_u64(1234),
+        &ristretto255::scalar_from_u64(5678),
+    )
 }
 
 /// Build a `KeyEncryption` (one `MultiRecipientEncryption` per 32-bit limb of `sk`, the matching
@@ -637,17 +646,13 @@ fun amount_and_proof_for_testing(
 /// and the new balance byte-equal to the old, the witness `w = new_sk · old_sk⁻¹ = 1` and the proof
 /// is just "the identity rekey." The balance is assumed limb-0-only (limb-0 blinding `r`; the other
 /// limbs encrypt zero, so their handles are the identity).
-fun self_handle_eq_proof_for_testing(
-    pk: &Element<G>,
-    r: u64,
-    dst: vector<u8>,
-): nizk::BatchedDdhProof {
+fun self_handle_eq_proof_for_testing(pk: &Element<G>, r: u64, dst: vector<u8>): nizk::DdhProof {
     let r_scalar = ristretto255::scalar_from_u64(r);
     let d = ristretto255::g_mul(&r_scalar, pk);
     let id = ristretto255::g_identity();
     // Pair 0 is the public key; pairs 1..4 are the limb handles (only limb 0 is non-identity).
     let bases = vector[*pk, d, id, id, id];
-    nizk::prove_batched_ddh(dst, &ristretto255::scalar_one(), &bases, &bases, &r_scalar)
+    nizk::prove_ddh(dst, &ristretto255::scalar_one(), &bases, &bases, &r_scalar)
 }
 
 #[test]
@@ -953,7 +958,7 @@ fun test_set_public_key_replaces_balance_with_new_handle() {
     let w = ristretto255::scalar_div(&sk_old, &sk_new); // = sk_new / sk_old
     let id = ristretto255::g_identity();
     // Batched re-key proof over (pk, limb-0 handle) — the other limbs are zero (identity handles).
-    let rekey_proof = nizk::prove_batched_ddh(
+    let rekey_proof = nizk::prove_ddh(
         batch_ddh_dst,
         &w,
         &vector[pk_old, d_old, id, id, id],
@@ -1101,7 +1106,7 @@ fun test_try_set_public_key_and_unpause() {
         bad_restate_proof,
         bad_balance_proof,
         bad_rekey_ea.decryption_handles_for_testing(),
-        nizk::prove_batched_ddh(
+        nizk::prove_ddh(
             batch_ddh_dst,
             &w,
             &vector[pk_old, d_old_restate, id, id, id],
@@ -1135,7 +1140,7 @@ fun test_try_set_public_key_and_unpause() {
         restate_proof,
         balance_proof,
         rekey_ea.decryption_handles_for_testing(),
-        nizk::prove_batched_ddh(
+        nizk::prove_ddh(
             batch_ddh_dst,
             &w,
             &vector[pk_old, d_old_restate, id, id, id],
@@ -1839,4 +1844,33 @@ fun verify_well_formed_proof_dst_mismatch_fails() {
             &vector[pk],
         ),
     );
+}
+
+// === Policy tests ===
+
+#[test]
+fun with_witness_grants_only_the_permissioned_operation() {
+    let owner = @0x100;
+    let mut policy = policy::permissionless();
+    policy::set<Witness>(&mut policy, vector[0u8, 3u8]);
+
+    let auth = policy::with_witness<TestCurrency, Witness>(&policy, 3u8, owner, Witness {});
+    assert!(auth.is_allowed(3u8));
+    assert!(!auth.is_allowed(0u8));
+    assert!(auth.is_authenticated(owner));
+}
+
+#[test, expected_failure(abort_code = ::contra::policy::EAuthorizationError)]
+fun with_witness_rejects_permissionless_operation() {
+    let mut policy = policy::permissionless();
+    policy::set<Witness>(&mut policy, vector[0u8, 3u8]);
+
+    // Operation 1 is not in the policy's permissioned set; the witness cannot mint an auth for it.
+    let _auth = policy::with_witness<TestCurrency, Witness>(&policy, 1u8, @0x100, Witness {});
+}
+
+#[test, expected_failure(abort_code = ::contra::policy::EAuthorizationError)]
+fun with_witness_rejects_empty_policy() {
+    let policy = policy::permissionless();
+    let _auth = policy::with_witness<TestCurrency, Witness>(&policy, 0u8, @0x100, Witness {});
 }
