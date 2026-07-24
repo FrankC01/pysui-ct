@@ -16,13 +16,13 @@ import pysui.sui.sui_common.sui_commands as cmd
 from pysui.abstracts.async_client import AsyncClientBase
 import pysui.sui.sui_grpc.suimsgs.sui.rpc.v2 as sui_prot
 
-PACKAGE: str | None = "0x2e2ff112f8752a7c7b05498039a431c8dbce1c57b7f6bdce270e759cb312aea1"
-UPGRADE_CAP: str | None = "0x9e413bfa00d17e91691f06b1cdfeeef21bb5fe98287d09a85b685d7e39c5e5d5"
-TOKEN_REGISTRY: str | None = "0xa0d715a3680e67b30fe2be480685fceefa377768106efbc7d6f1150559f2b194"
-ACCOUNT_REGISTRY: str | None = "0x8d9a999bbbe9c82e2b0472f4476f7447de08ee3dd7fa8b856f9cf25201489aa4"
-CONFIDENTIAL_TOKEN: str | None = "0x4fb12251b5003bb08efb6f78624bff5890a9692f21e868c94d10e40a7aa736a7"
-POOL: str | None = "0x16088a0532db585c33e240712361f89731b0e2a362e1223d083e6250cb6baf91"
-MANAGEMENT_CAP: str | None = "0x889ad267349c32146a38c7302206ea931e347892bbf6ce8b8eb4a8a1a7259cf2"
+PACKAGE: str | None = "0x5dd6554268ac3e50b9c510a84bb75b6ba85bb491cd5f18314cbb2b9a5cf1dca5"
+UPGRADE_CAP: str | None = "0x8944d5d5f2ec05ddb1011a528f3655681d0f68cc9b1d80f9494ff32530c65f53"
+TOKEN_REGISTRY: str | None = "0xbf5f6e9e9af66e87691e6c43091aa54eaf18e47b9aca7d18ac94d85445772d6c"
+ACCOUNT_REGISTRY: str | None = "0xbdb5acc18cc7dbd02967fd1ebec44c1a5192b889dab2a4cd56d6a671d3a8c02a"
+CONFIDENTIAL_TOKEN: str | None = "0xbd4b8cd0d3f119ec16b5ab33b34c500dd2d56426f1b556e8322e0813233cc672"
+POOL: str | None = "0x403b4a720b8891a1df2d42eaca4bc04897678060adc822f0a2ee6f128d5c3d15"
+MANAGEMENT_CAP: str | None = "0x16e11565612b6dedacc5ee27bebf668655daa53dbf2d02201929600e9e0d3ee2"
 
 _PACKAGE_TYPE = "package"
 _UPGRADE_CAP_TYPE = "::package::UpgradeCap"
