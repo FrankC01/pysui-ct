@@ -4,7 +4,9 @@
 
 **Current devnet state:** `contra` package_id `0x2e2ff112f8752a7c7b05498039a431c8dbce1c57b7f6bdce270e759cb312aea1`; `ConfidentialToken<PYSUI_TOKEN>` created and shared at `0x4fb12251b5003bb08efb6f78624bff5890a9692f21e868c94d10e40a7aa736a7`. **Stale relative to vendored source:** these ids predate the 2026-07-16 API refresh (BatchedDdhProof removal, ConsistencyProof restructure — see project memory `project_ct_contract_api_refresh_2026_07`) and the 2026-07-24 full sync above — republish is still pending. Devnet is also wiped weekly regardless (see project memory `project_devnet_weekly_wipe`). Verify liveness and re-publish before assuming any id is usable.
 
-**Uncommitted at session end:** `console/cmds.py` (pre-existing, unrelated to this session) and the 5 `contracts/sources/*.move` files just synced from upstream — Frank commits, not Claude.
+**Also synced this session:** `contracts/tests/contra_tests.move` was found stale against the same 2026-07-16 API refresh (referencing removed `BatchedDdhProof`/`prove_batched_ddh` and the old 5-arg `prove_elgamal` signature) — copied from upstream `~/mysten_repos/confidential-transfers/move/tests/contra_tests.move` and confirmed byte-identical, clearing the reported compile errors.
+
+**Commit state:** Frank committed the contract sync (`bdf75c9`, `d399342` — "Source refresh from confidential_transfer/ repo contracts"). `git status` is clean as of session end.
 
 ---
 
