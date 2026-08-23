@@ -31,7 +31,7 @@ _ACCOUNT_REGISTRY_FRAGMENT = "::contra::AccountRegistry"
 _CONFIDENTIAL_TOKEN_FRAGMENT = "::contra::ConfidentialToken<"
 _POOL_FRAGMENT = "::contra::Pool<"
 _MANAGEMENT_CAP_FRAGMENT = "::contra::ManagementCap<"
-_AUDITOR_KEY_ELEMENT_TYPE = "0x2::group_ops::Element<0x2::ristretto255::G>"
+_AUDITOR_KEY_TYPE_FRAGMENT = "::twisted_elgamal::PublicKey"
 
 
 def _object_id_by_type_fragment(*, objects: list, type_fragment: str) -> str | None:
@@ -178,7 +178,7 @@ async def create_ct_token(*, client: AsyncClientBase, args: argparse.Namespace) 
     try:
         txn = await client.transaction(initial_sender=active_address)
         auditor_public_keys = await txn.make_move_vector(
-            items=[], item_type=_AUDITOR_KEY_ELEMENT_TYPE
+            items=[], item_type=f"{PACKAGE}{_AUDITOR_KEY_TYPE_FRAGMENT}"
         )
         ct, management_cap = await txn.move_call(
             target=f"{PACKAGE}::contra::new_confidential_token",

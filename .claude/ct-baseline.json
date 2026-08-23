@@ -1,0 +1,18 @@
+{
+  "baseline_commit": "c2f842ce454b4f2d9b2417b2bfb58140a555040c",
+  "baseline_date": "2026-08-21",
+  "source": "Bumped 2026-08-23 after a full verification pass reconciled all drift between the prior baseline (257f9a05d2fcd9468c243cc70fa01cd4a06f1bd0, 2026-07-24) and this commit into memory project-ct-contract-api-refresh-2026-07. This is current upstream HEAD as confirmed via `git -C ~/mysten_repos/confidential-transfers rev-parse HEAD` on 2026-08-23 and matches the HEAD peer session pysui-crypto-d4 independently confirmed the same day.",
+  "tracked_paths": [
+    "move/sources/"
+  ],
+  "vendored_state": {
+    "last_hand_copy": "2026-07-24",
+    "exact_upstream_commit_at_last_copy": "unknown - not recorded at time of copy, but confirmed via grep to match the escrow-model auditor design present at the prior baseline (257f9a05)",
+    "note": "contracts/sources/ has NEVER been updated past the 2026-07-24 hand-copy - it is now three drift waves behind baseline_commit (see known_drift_waves below and memory project-ct-contract-api-refresh-2026-07 for full detail). Bumping baseline_commit here only advances the TRACKING reference point for future check-ct-contracts runs; it does not mean the vendored copy is current. diff -rq against contracts/sources/ will show all 9 vendored files + 2 new files (range_proof.move, session_id.move) as differing until an actual hand-copy is done.",
+    "known_drift_waves": [
+      "2026-07-16 - proof API: BatchedDdhProof removed, folded into generalized DdhProof - see memory project-ct-contract-api-refresh-2026-07",
+      "2026-08-17 - check-ct-contracts run recorded auditor-model direction WRONG (claimed escrow was newly added; direction corrected 2026-08-23 - escrow was actually present at the 257f9a05 baseline and was REMOVED, per-transaction auditing restored). Full per-file diff.rq-derived breakdown in pysui-ct/.claude/ct-contract-diff-2026-08-17.md is otherwise still useful but the auditor-model bullet in it is stale - see the CORRECTION note in memory project-ct-contract-api-refresh-2026-07",
+      "2026-08-23 - independently verified via this baseline-tracked check: per-account escrow (Auditors/KeyEncryption/VerifiedKeyEncryption/KeyConsistencyProof) removed, per-transaction auditing (AuditorPackage/VerifiedAuditorHandles/ElGamalProof) restored starting at commit dae394a (2026-08-13); new range_proof.move/session_id.move; register/set_public_key(->rekey_token_account)/batched_transfer/unwrap signatures all broken. console/cmds.py's _AUDITOR_KEY_ELEMENT_TYPE fixed same day. Full detail in memory project-ct-contract-api-refresh-2026-07"
+    ]
+  }
+}
