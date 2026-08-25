@@ -3,4 +3,4 @@ name = "contra"
 edition = "2024"
 
 [environments]
-devnet = "62f06689"
+devnet = "5a5b770f"

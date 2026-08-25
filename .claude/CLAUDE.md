@@ -40,24 +40,30 @@ Data/IDs flow **one way, out of this repo**.
 
 ## Current state
 
-First backlog item complete. `contracts/` holds the vendored Mysten Confidential Transfer Move
-package (module `contra::contra`, 10 source files: contra, policy, balance, encrypted_amount,
-twisted_elgamal, nizk, auditors, deny_list, decode, events). `console/` is a scaffolded
-pysui-driven CLI (`__init__.py`, `__main__.py`, `cmd_args.py`, `cmds.py`) mirroring
-`pysui-token/console/`'s layout, currently exposing a `publish` subcommand.
+Backlog item #2 (republish refreshed CT contract + recapture ids) complete as of 2026-08-25.
+`contracts/` holds the vendored Mysten Confidential Transfer Move package (module
+`contra::contra`), synced to upstream HEAD `c2f842c` (11 source files, including
+`range_proof.move`/`session_id.move`). `console/` is a scaffolded pysui-driven CLI
+(`__init__.py`, `__main__.py`, `cmd_args.py`, `cmds.py`) mirroring `pysui-token/console/`'s
+layout, exposing `publish`, `create-ct-token`, and `export-ids` subcommands.
 
-The `contra` package has been published to devnet. `console/cmds.py` holds the captured ids as
-module-level defaults:
-- `package_id`: `0x2e2ff112f8752a7c7b05498039a431c8dbce1c57b7f6bdce270e759cb312aea1`
-- `token_registry`: `0xa0d715a3680e67b30fe2be480685fceefa377768106efbc7d6f1150559f2b194`
-- `account_registry`: `0x8d9a999bbbe9c82e2b0472f4476f7447de08ee3dd7fa8b856f9cf25201489aa4`
-- `upgrade_cap`: `0x9e413bfa00d17e91691f06b1cdfeeef21bb5fe98287d09a85b685d7e39c5e5d5`
+The `contra` package has been published to devnet (post-2026-08-25 weekly wipe, devnet chain-id
+`5a5b770f`), and `create-ct-token` has been run against it. `console/cmds.py` holds the captured
+ids as module-level defaults:
+- `package_id`: `0xa516f301e83e90c2f335c5ce22802061faeacbf8a093bb9c5afd3165a9521add`
+- `token_registry`: `0x674fbada71b10a4561e174245cdf27a3e446fb406fd54e3abee4ba4f86635dfa`
+- `account_registry`: `0x8ff4a773339061ad8e1ecb961da58ddba9368c948fd180ca161990d03c0665f5`
+- `upgrade_cap`: `0x4ce62699a488a60420f1506c6f59938d5fbb5f025390635109e0fa53448b4e49`
+- `confidential_token`: `0x87a0faa0a9d85f13c9513562ffb0a8c7e297e96c683220b96bf3b606d703c0ee`
+- `pool`: `0xadf9cccb2ed68c6bcceb2efcf118e929611592ef2c578dfe35c3eccd7f14b220`
+- `management_cap`: `0xb9d827386d66b09f3e44ed5e9178b92f01149e24c28f230f7c7825df628c1c70`
 
 Devnet is wiped on a weekly cadence by Mysten, which invalidates these ids — republish before
 assuming any of them are live (see project memory `project_devnet_weekly_wipe`).
 
 These are the three values pysui #79's `PrivateFundsConfig` needs (package_id, token_registry,
-account_registry). No commits yet.
+account_registry) — not yet propagated downstream. Working tree changes not yet committed as of
+this update.
 
 ## Design decisions locked so far
 

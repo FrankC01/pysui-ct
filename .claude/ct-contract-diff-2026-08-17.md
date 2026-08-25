@@ -1,5 +1,14 @@
 # CT Move Contract Diff — 2026-08-17
 
+> **SUPERSEDED / STALE as of 2026-08-23.** The auditor-model bullet below has the direction
+> backwards (it claims per-account escrow was newly *added*; a rigorous baseline-tracked
+> re-check proved escrow was actually already present at baseline and was *removed*). More
+> importantly, `contracts/sources/` was fully resynced to upstream `c2f842c` on 2026-08-23, so
+> this entire diff (against the much older `96f9c27`) no longer reflects the gap between
+> vendored and upstream — there currently is no gap. See project memory
+> `project_ct_contract_api_refresh_2026_07` (2026-08-23 section) for the corrected, verified
+> record. Kept here for historical audit trail only — do not hand-copy from this file.
+
 Source: `check-ct-contracts` skill run. Upstream `~/mysten_repos/confidential-transfers`
 pulled (`257f9a0..96f9c27`) and diffed against vendored copy in
 `~/frankc01/pysui-ct/contracts/sources/`. No files copied — vendoring stays manual per
